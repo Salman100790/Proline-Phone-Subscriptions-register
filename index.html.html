@@ -1,0 +1,419 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{min-height:600px;background:#111;color:#fff;font-family:system-ui,-apple-system,sans-serif}
+.header{background:#0a0a0a;border-bottom:3px solid #CC1C1C;padding:16px 24px;display:flex;align-items:center;gap:16px}
+.header img{height:44px;object-fit:contain}
+.header-title{font-size:13px;color:#aaa;letter-spacing:2px;text-transform:uppercase;font-weight:500}
+.tabs{display:flex;background:#0a0a0a;border-bottom:1px solid #222}
+.tab{padding:12px 24px;font-size:13px;font-weight:500;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:#888;border-bottom:3px solid transparent;transition:all 0.2s;border:none;background:none;flex:1}
+.tab.active{color:#fff;border-bottom:3px solid #CC1C1C}
+.tab:hover:not(.active){color:#ddd;background:#141414}
+.tab.admin-tab{color:#CC1C1C}
+.tab.admin-tab.active{border-bottom-color:#CC1C1C}
+.content{padding:24px}
+.form-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:24px;max-width:640px;margin:0 auto}
+.form-title{font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.form-title i{color:#CC1C1C;font-size:18px}
+.form-subtitle{font-size:12px;color:#888;margin-bottom:20px;letter-spacing:0.5px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:500}
+.field input,.field select,.field textarea{width:100%;background:#111;border:1px solid #333;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;outline:none;transition:border-color 0.2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#CC1C1C}
+.field select option{background:#111}
+.field textarea{resize:vertical;min-height:72px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-submit{background:#CC1C1C;color:#fff;border:none;border-radius:6px;padding:12px 28px;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;margin-top:4px;transition:background 0.2s}
+.btn-submit:hover{background:#a81515}
+.success-msg{background:#1a2e1a;border:1px solid #2d5a2d;border-radius:6px;padding:12px 16px;color:#6fcf6f;font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.admin-section{max-width:920px;margin:0 auto}
+.admin-lock{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:32px;max-width:360px;margin:40px auto;text-align:center}
+.admin-lock i{font-size:40px;color:#CC1C1C;margin-bottom:12px;display:block}
+.admin-lock h3{font-size:16px;font-weight:500;margin-bottom:4px}
+.admin-lock p{font-size:12px;color:#888;margin-bottom:20px}
+.admin-lock input{width:100%;background:#111;border:1px solid #333;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;outline:none;margin-bottom:12px}
+.admin-lock input:focus{border-color:#CC1C1C}
+.err-msg{color:#e05555;font-size:12px;margin-bottom:10px}
+.register-toggle{display:flex;gap:8px;margin-bottom:20px}
+.reg-btn{background:#1a1a1a;border:1px solid #333;color:#aaa;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+.reg-btn.active{background:#CC1C1C;border-color:#CC1C1C;color:#fff}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#0a0a0a;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-size:11px;font-weight:500;padding:10px 12px;text-align:left;border-bottom:1px solid #2a2a2a}
+td{padding:10px 12px;border-bottom:1px solid #1e1e1e;color:#ddd;vertical-align:top}
+tr:hover td{background:#161616}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+.badge-phone{background:#1a2840;color:#5899d6}
+.badge-fob{background:#2a1f0a;color:#d69d40}
+.badge-laptop{background:#1a2a1a;color:#6fbb6f}
+.badge-tablet{background:#2a1a2a;color:#b87fd6}
+.badge-other{background:#2a2a2a;color:#aaa}
+.del-btn{background:none;border:1px solid #3a1a1a;color:#cc5555;padding:4px 10px;border-radius:4px;font-size:11px;cursor:pointer;transition:all 0.2s}
+.del-btn:hover{background:#3a1a1a}
+.empty-state{text-align:center;padding:40px;color:#555}
+.empty-state i{font-size:36px;margin-bottom:10px;display:block;color:#333}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:14px;text-align:center}
+.stat-num{font-size:26px;font-weight:500;color:#CC1C1C}
+.stat-lbl{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.logout-btn{background:none;border:1px solid #333;color:#888;padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer}
+.logout-btn:hover{border-color:#CC1C1C;color:#CC1C1C}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.section-header h3{font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:#aaa}
+.header-actions{display:flex;align-items:center;gap:8px}
+.export-btn{background:#1a2e1a;border:1px solid #2d5a2d;color:#6fbb6f;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s}
+.export-btn:hover{background:#223d22;border-color:#3d7a3d}
+.export-btn i{font-size:15px}
+.export-all-btn{background:#1a2433;border:1px solid #2a4060;color:#5899d6;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s}
+.export-all-btn:hover{background:#203050}
+.export-all-btn i{font-size:15px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1a2e1a;border:1px solid #2d5a2d;color:#6fbb6f;padding:12px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+
+<div class="app">
+  <div class="header">
+    <img id="logoImg" src="" alt="Proline" />
+    <div>
+      <div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:1px">ASSET & SUBSCRIPTION REGISTER</div>
+      <div class="header-title">Proline Group — Internal</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('property')"><i class="ti ti-device-mobile" aria-hidden="true"></i> Company Property</button>
+    <button class="tab" onclick="showTab('subscriptions')"><i class="ti ti-credit-card" aria-hidden="true"></i> Subscriptions</button>
+    <button class="tab admin-tab" onclick="showTab('admin')"><i class="ti ti-lock" aria-hidden="true"></i> Admin</button>
+  </div>
+  <div class="content">
+
+    <!-- PROPERTY FORM -->
+    <div id="tab-property">
+      <div class="form-card">
+        <div class="form-title"><i class="ti ti-device-mobile" aria-hidden="true"></i> Company Property Register</div>
+        <div class="form-subtitle">Submit items of company property assigned to you. All fields required.</div>
+        <div id="prop-success" style="display:none" class="success-msg"><i class="ti ti-circle-check" aria-hidden="true"></i> Entry submitted successfully.</div>
+        <div class="field"><label>Your Full Name</label><input type="text" id="prop-name" placeholder="e.g. Jake Smith" /></div>
+        <div class="field"><label>Item Type</label>
+          <select id="prop-type">
+            <option value="">— Select item —</option>
+            <option>Phone</option><option>Fob / Key Card</option><option>Laptop</option><option>Tablet</option><option>Vehicle</option><option>Tool / Equipment</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Item Description</label><input type="text" id="prop-desc" placeholder="e.g. iPhone 14 Pro, Black — 128GB" /></div>
+        <div class="field-row">
+          <div class="field"><label>Asset / Serial Number</label><input type="text" id="prop-serial" placeholder="e.g. SN-20241105" /></div>
+          <div class="field"><label>Date Issued</label><input type="date" id="prop-date" /></div>
+        </div>
+        <div class="field"><label>Notes (optional)</label><textarea id="prop-notes" placeholder="Any relevant notes e.g. condition, accessories included..."></textarea></div>
+        <button class="btn-submit" onclick="submitProperty()">Submit Entry</button>
+      </div>
+    </div>
+
+    <!-- SUBSCRIPTIONS FORM -->
+    <div id="tab-subscriptions" style="display:none">
+      <div class="form-card">
+        <div class="form-title"><i class="ti ti-credit-card" aria-hidden="true"></i> Subscription Register</div>
+        <div class="form-subtitle">Log any company subscriptions assigned to or used by you.</div>
+        <div id="sub-success" style="display:none" class="success-msg"><i class="ti ti-circle-check" aria-hidden="true"></i> Subscription logged successfully.</div>
+        <div class="field"><label>Your Full Name</label><input type="text" id="sub-name" placeholder="e.g. Jake Smith" /></div>
+        <div class="field-row">
+          <div class="field"><label>Subscription Name</label><input type="text" id="sub-svcname" placeholder="e.g. Adobe Creative Cloud" /></div>
+          <div class="field"><label>Category</label>
+            <select id="sub-cat">
+              <option value="">— Category —</option>
+              <option>Software / SaaS</option><option>Cloud / Hosting</option><option>Comms / Messaging</option><option>Project Management</option><option>Design</option><option>Finance / Accounting</option><option>Security</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Email Address Linked</label><input type="email" id="sub-email" placeholder="e.g. jake@prolinemetalcladding.com.au" /></div>
+        <div class="field-row">
+          <div class="field"><label>Billing Cycle</label>
+            <select id="sub-cycle">
+              <option value="">— Cycle —</option><option>Monthly</option><option>Annual</option><option>Quarterly</option>
+            </select>
+          </div>
+          <div class="field"><label>Charge Date</label><input type="text" id="sub-chargedate" placeholder="e.g. 15th of each month" /></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Cost (AUD)</label><input type="number" id="sub-cost" placeholder="e.g. 79.99" min="0" step="0.01" /></div>
+          <div class="field"><label>Payment Method</label>
+            <select id="sub-payment">
+              <option value="">— Method —</option><option>Company Card</option><option>Personal (Reimbursed)</option><option>Direct Debit</option><option>Unknown</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Notes (optional)</label><textarea id="sub-notes" placeholder="Any relevant notes e.g. shared team login, usage purpose..."></textarea></div>
+        <button class="btn-submit" onclick="submitSubscription()">Submit Entry</button>
+      </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="tab-admin" style="display:none">
+      <div id="admin-lock-screen">
+        <div class="admin-lock">
+          <i class="ti ti-lock" aria-hidden="true"></i>
+          <h3>Admin Access</h3>
+          <p>This area is restricted to authorised personnel only.</p>
+          <input type="password" id="admin-pass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()" />
+          <div id="admin-err" class="err-msg" style="display:none">Incorrect password. Please try again.</div>
+          <button class="btn-submit" onclick="adminLogin()">Unlock</button>
+        </div>
+      </div>
+      <div id="admin-panel" style="display:none">
+        <div class="admin-section">
+          <div class="section-header">
+            <h3><i class="ti ti-shield-check" aria-hidden="true" style="color:#CC1C1C;margin-right:6px"></i>Admin Dashboard</h3>
+            <div class="header-actions">
+              <button class="export-all-btn" onclick="exportAll()"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i> Export All to Excel</button>
+              <button class="logout-btn" onclick="adminLogout()"><i class="ti ti-logout" aria-hidden="true"></i> Logout</button>
+            </div>
+          </div>
+          <div class="stats-row" id="admin-stats"></div>
+          <div class="register-toggle">
+            <button class="reg-btn active" id="togProp" onclick="adminToggle('property')">Company Property</button>
+            <button class="reg-btn" id="togSub" onclick="adminToggle('subscriptions')">Subscriptions</button>
+          </div>
+
+          <div id="admin-property-view">
+            <div class="section-header" style="margin-bottom:12px">
+              <span style="font-size:12px;color:#888">All property items on record</span>
+              <button class="export-btn" onclick="exportProperty()"><i class="ti ti-download" aria-hidden="true"></i> Export Property Register</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Name</th><th>Type</th><th>Description</th><th>Serial</th><th>Date Issued</th><th>Notes</th><th>Submitted</th><th></th></tr></thead>
+                <tbody id="prop-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="admin-sub-view" style="display:none">
+            <div class="section-header" style="margin-bottom:12px">
+              <span style="font-size:12px;color:#888">All subscriptions on record</span>
+              <button class="export-btn" onclick="exportSubscriptions()"><i class="ti ti-download" aria-hidden="true"></i> Export Subscription Register</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Name</th><th>Subscription</th><th>Category</th><th>Email</th><th>Cycle</th><th>Charge Date</th><th>Cost (AUD)</th><th>Payment</th><th>Notes</th><th>Submitted</th><th></th></tr></thead>
+                <tbody id="sub-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-circle-check" aria-hidden="true"></i> <span id="toast-msg"></span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const ADMIN_PASSWORD = 'Proline2025';
+let adminView = 'property';
+
+async function loadLogo() {
+  try {
+    const res = await fetch('/mnt/user-data/uploads/Logo-Proline.png');
+    if (!res.ok) return;
+    const blob = await res.blob();
+    const reader = new FileReader();
+    reader.onload = e => { document.getElementById('logoImg').src = e.target.result; };
+    reader.readAsDataURL(blob);
+  } catch(e) {}
+}
+loadLogo();
+
+function showTab(t) {
+  ['property','subscriptions','admin'].forEach((id,i) => {
+    document.getElementById('tab-'+id).style.display = (id===t)?'block':'none';
+    document.querySelectorAll('.tab')[i].classList.toggle('active', id===t);
+  });
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 3000);
+}
+
+function badgeType(t) {
+  const m = {Phone:'badge-phone','Fob / Key Card':'badge-fob',Laptop:'badge-laptop',Tablet:'badge-tablet'};
+  return `<span class="badge ${m[t]||'badge-other'}">${t||'—'}</span>`;
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleDateString('en-AU',{day:'2-digit',month:'short',year:'numeric'}); } catch(e){return iso;}
+}
+
+async function getList(key) {
+  try { const r = await window.storage.get(key); return r ? JSON.parse(r.value) : []; } catch(e) { return []; }
+}
+async function saveList(key, list) { await window.storage.set(key, JSON.stringify(list)); }
+
+async function submitProperty() {
+  const name = document.getElementById('prop-name').value.trim();
+  const type = document.getElementById('prop-type').value;
+  const desc = document.getElementById('prop-desc').value.trim();
+  const serial = document.getElementById('prop-serial').value.trim();
+  const date = document.getElementById('prop-date').value;
+  const notes = document.getElementById('prop-notes').value.trim();
+  if (!name||!type||!desc) { alert('Please fill in Name, Item Type and Description.'); return; }
+  const list = await getList('proline:property');
+  list.push({id:Date.now(),name,type,desc,serial,date,notes,submitted:new Date().toISOString()});
+  await saveList('proline:property', list);
+  ['prop-name','prop-desc','prop-serial','prop-date','prop-notes'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('prop-type').value='';
+  document.getElementById('prop-success').style.display='flex';
+  setTimeout(()=>{document.getElementById('prop-success').style.display='none';},4000);
+}
+
+async function submitSubscription() {
+  const name = document.getElementById('sub-name').value.trim();
+  const svcname = document.getElementById('sub-svcname').value.trim();
+  const cat = document.getElementById('sub-cat').value;
+  const email = document.getElementById('sub-email').value.trim();
+  const cycle = document.getElementById('sub-cycle').value;
+  const chargedate = document.getElementById('sub-chargedate').value.trim();
+  const cost = document.getElementById('sub-cost').value;
+  const payment = document.getElementById('sub-payment').value;
+  const notes = document.getElementById('sub-notes').value.trim();
+  if (!name||!svcname||!email) { alert('Please fill in Name, Subscription Name and Email.'); return; }
+  const list = await getList('proline:subscriptions');
+  list.push({id:Date.now(),name,svcname,cat,email,cycle,chargedate,cost,payment,notes,submitted:new Date().toISOString()});
+  await saveList('proline:subscriptions', list);
+  ['sub-name','sub-svcname','sub-email','sub-chargedate','sub-cost','sub-notes'].forEach(id=>{document.getElementById(id).value='';});
+  ['sub-cat','sub-cycle','sub-payment'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('sub-success').style.display='flex';
+  setTimeout(()=>{document.getElementById('sub-success').style.display='none';},4000);
+}
+
+function adminLogin() {
+  if (document.getElementById('admin-pass').value === ADMIN_PASSWORD) {
+    document.getElementById('admin-lock-screen').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadAdminData();
+  } else {
+    document.getElementById('admin-err').style.display='block';
+    document.getElementById('admin-pass').value='';
+  }
+}
+function adminLogout() {
+  document.getElementById('admin-lock-screen').style.display='block';
+  document.getElementById('admin-panel').style.display='none';
+  document.getElementById('admin-pass').value='';
+  document.getElementById('admin-err').style.display='none';
+}
+function adminToggle(view) {
+  adminView = view;
+  document.getElementById('admin-property-view').style.display = view==='property'?'block':'none';
+  document.getElementById('admin-sub-view').style.display = view==='subscriptions'?'block':'none';
+  document.getElementById('togProp').classList.toggle('active', view==='property');
+  document.getElementById('togSub').classList.toggle('active', view==='subscriptions');
+}
+
+async function loadAdminData() {
+  const props = await getList('proline:property');
+  const subs = await getList('proline:subscriptions');
+  const totalCost = subs.reduce((a,s)=>a+(parseFloat(s.cost)||0),0);
+  document.getElementById('admin-stats').innerHTML = `
+    <div class="stat"><div class="stat-num">${props.length}</div><div class="stat-lbl">Property Items</div></div>
+    <div class="stat"><div class="stat-num">${subs.length}</div><div class="stat-lbl">Subscriptions</div></div>
+    <div class="stat"><div class="stat-num">$${totalCost.toFixed(2)}</div><div class="stat-lbl">Total Sub Cost</div></div>`;
+
+  const ptbody = document.getElementById('prop-tbody');
+  ptbody.innerHTML = props.length ? props.map(p=>`<tr>
+    <td><strong>${p.name}</strong></td><td>${badgeType(p.type)}</td><td>${p.desc}</td>
+    <td style="font-family:monospace;font-size:12px;color:#aaa">${p.serial||'—'}</td>
+    <td style="color:#aaa;font-size:12px">${p.date||'—'}</td>
+    <td style="color:#888;font-size:12px">${p.notes||'—'}</td>
+    <td style="color:#555;font-size:11px">${fmtDate(p.submitted)}</td>
+    <td><button class="del-btn" onclick="deleteEntry('property',${p.id})"><i class="ti ti-trash" aria-hidden="true"></i></button></td>
+  </tr>`).join('') : '<tr><td colspan="8"><div class="empty-state"><i class="ti ti-inbox" aria-hidden="true"></i>No property entries yet.</div></td></tr>';
+
+  const stbody = document.getElementById('sub-tbody');
+  stbody.innerHTML = subs.length ? subs.map(s=>`<tr>
+    <td><strong>${s.name}</strong></td><td>${s.svcname}</td>
+    <td style="font-size:12px;color:#aaa">${s.cat||'—'}</td>
+    <td style="font-size:12px;color:#5899d6">${s.email}</td>
+    <td style="font-size:12px;color:#aaa">${s.cycle||'—'}</td>
+    <td style="font-size:12px;color:#aaa">${s.chargedate||'—'}</td>
+    <td style="color:#6fbb6f;font-weight:500">${s.cost?'$'+parseFloat(s.cost).toFixed(2):'—'}</td>
+    <td style="font-size:12px;color:#aaa">${s.payment||'—'}</td>
+    <td style="font-size:12px;color:#888">${s.notes||'—'}</td>
+    <td style="color:#555;font-size:11px">${fmtDate(s.submitted)}</td>
+    <td><button class="del-btn" onclick="deleteEntry('subscriptions',${s.id})"><i class="ti ti-trash" aria-hidden="true"></i></button></td>
+  </tr>`).join('') : '<tr><td colspan="11"><div class="empty-state"><i class="ti ti-inbox" aria-hidden="true"></i>No subscription entries yet.</div></td></tr>';
+}
+
+async function deleteEntry(reg, id) {
+  if (!confirm('Delete this entry?')) return;
+  const key = 'proline:'+reg;
+  const list = await getList(key);
+  await saveList(key, list.filter(e=>e.id!==id));
+  loadAdminData();
+}
+
+function styleSheet(ws) {
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  for (let C = range.s.c; C <= range.e.c; C++) {
+    const hdr = XLSX.utils.encode_cell({r:0,c:C});
+    if (ws[hdr]) ws[hdr].s = {font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'CC1C1C'}},alignment:{horizontal:'center'}};
+  }
+}
+
+async function exportProperty() {
+  const props = await getList('proline:property');
+  if (!props.length) { showToast('No property entries to export.'); return; }
+  const rows = props.map(p=>({'Employee Name':p.name,'Item Type':p.type,'Description':p.desc,'Asset / Serial':p.serial||'','Date Issued':p.date||'','Notes':p.notes||'','Date Submitted':fmtDate(p.submitted)}));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{wch:20},{wch:16},{wch:30},{wch:18},{wch:14},{wch:28},{wch:16}];
+  styleSheet(ws);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Property Register');
+  XLSX.writeFile(wb, `Proline_Property_Register_${today()}.xlsx`);
+  showToast('Property Register exported successfully.');
+}
+
+async function exportSubscriptions() {
+  const subs = await getList('proline:subscriptions');
+  if (!subs.length) { showToast('No subscription entries to export.'); return; }
+  const rows = subs.map(s=>({'Employee Name':s.name,'Subscription':s.svcname,'Category':s.cat||'','Email Linked':s.email,'Billing Cycle':s.cycle||'','Charge Date':s.chargedate||'','Cost (AUD)':s.cost?parseFloat(s.cost):'',' Payment Method':s.payment||'','Notes':s.notes||'','Date Submitted':fmtDate(s.submitted)}));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{wch:20},{wch:24},{wch:20},{wch:30},{wch:14},{wch:18},{wch:12},{wch:20},{wch:28},{wch:16}];
+  styleSheet(ws);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Subscription Register');
+  XLSX.writeFile(wb, `Proline_Subscription_Register_${today()}.xlsx`);
+  showToast('Subscription Register exported successfully.');
+}
+
+async function exportAll() {
+  const props = await getList('proline:property');
+  const subs = await getList('proline:subscriptions');
+  if (!props.length && !subs.length) { showToast('No data to export yet.'); return; }
+  const wb = XLSX.utils.book_new();
+  if (props.length) {
+    const pRows = props.map(p=>({'Employee Name':p.name,'Item Type':p.type,'Description':p.desc,'Asset / Serial':p.serial||'','Date Issued':p.date||'','Notes':p.notes||'','Date Submitted':fmtDate(p.submitted)}));
+    const ws1 = XLSX.utils.json_to_sheet(pRows);
+    ws1['!cols'] = [{wch:20},{wch:16},{wch:30},{wch:18},{wch:14},{wch:28},{wch:16}];
+    styleSheet(ws1);
+    XLSX.utils.book_append_sheet(wb, ws1, 'Property Register');
+  }
+  if (subs.length) {
+    const sRows = subs.map(s=>({'Employee Name':s.name,'Subscription':s.svcname,'Category':s.cat||'','Email Linked':s.email,'Billing Cycle':s.cycle||'','Charge Date':s.chargedate||'','Cost (AUD)':s.cost?parseFloat(s.cost):'',' Payment Method':s.payment||'','Notes':s.notes||'','Date Submitted':fmtDate(s.submitted)}));
+    const ws2 = XLSX.utils.json_to_sheet(sRows);
+    ws2['!cols'] = [{wch:20},{wch:24},{wch:20},{wch:30},{wch:14},{wch:18},{wch:12},{wch:20},{wch:28},{wch:16}];
+    styleSheet(ws2);
+    XLSX.utils.book_append_sheet(wb, ws2, 'Subscription Register');
+  }
+  XLSX.writeFile(wb, `Proline_All_Registers_${today()}.xlsx`);
+  showToast('Full register exported — both sheets included.');
+}
+
+function today() {
+  return new Date().toISOString().slice(0,10);
+}
+</script>
